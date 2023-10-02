@@ -26,7 +26,7 @@ from six import string_types
 from six.moves import range
 import tensorflow.compat.v1 as tf
 from google.protobuf import text_format
-from object_detection.protos import string_int_label_map_pb2
+from object_detection.protos import string_int_label_map
 
 _LABEL_OFFSET = 1
 
@@ -131,13 +131,13 @@ def convert_label_map_to_categories(label_map,
       list_of_ids_already_added.append(item.id)
       category = {'id': item.id, 'name': name}
       if item.HasField('frequency'):
-        if item.frequency == string_int_label_map_pb2.LVISFrequency.Value(
+        if item.frequency == string_int_label_map.LVISFrequency.Value(
             'FREQUENT'):
           category['frequency'] = 'f'
-        elif item.frequency == string_int_label_map_pb2.LVISFrequency.Value(
+        elif item.frequency == string_int_label_map.LVISFrequency.Value(
             'COMMON'):
           category['frequency'] = 'c'
-        elif item.frequency == string_int_label_map_pb2.LVISFrequency.Value(
+        elif item.frequency == string_int_label_map.LVISFrequency.Value(
             'RARE'):
           category['frequency'] = 'r'
       if item.HasField('instance_count'):
@@ -170,7 +170,7 @@ def load_labelmap(path, validator=None):
   """
   with tf.io.gfile.GFile(path, 'r') as fid:
     label_map_string = fid.read()
-    label_map = string_int_label_map_pb2.StringIntLabelMap()
+    label_map = string_int_label_map.StringIntLabelMap()
     try:
       text_format.Merge(label_map_string, label_map)
     except text_format.ParseError:
